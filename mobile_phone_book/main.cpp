@@ -39,18 +39,18 @@ std::unordered_map<long long, std::string> phoneBook;
 void startScreen() {
 	set_text_color(GREEN);
 	std::cout << "Welcome to the adress book database." << std::endl;
-	std::cout << "In this database, you can create, change and delete specific user" << std::endl;
-	set_text_color(RED);
+	std::cout << "In this database, you can create, change and delete specific user." << std::endl;
+	//set_text_color(MAGENTA);
 	std::cout << "So, what do you want to do? Please, write a number: " << std::endl; 
 	set_text_color(BLUE);
 	std::cout << "1. Add user\n2. Change user\n3. Delete user" << std::endl; 
 	set_text_color(YELLOW);
-	std::cout << "To leave this menu, press ctrl + c" << std::endl;
+	std::cout << "To leave this menu, press ctrl + c." << std::endl;
 	//set_text_color(RESET);
 }
 
 void choiceOne(const UserData& user) {
-	set_text_color(YELLOW);
+	set_text_color(CYAN);
 	std::string fullName = user.name + " " + user.surname;
 	phoneBook.insert({user.phoneNumber, fullName});
 	// system("cls");
@@ -60,18 +60,34 @@ void choiceOne(const UserData& user) {
 }
 
 void choiceTwo(UserData& user) {
+	
 	auto it = phoneBook.find(user.phoneNumber);
+
+	auto tempFullName = it->second;
 
 	if (it != phoneBook.end()) {
 		phoneBook.erase(it);
-		std::string fullName = user.name + " " + user.surname;
-		if (fullName == "S S" ) {   //|| fullName == user.name + " S" || fullName == "S " + user.surname
-			fullName = it->second;
-		} else if ()
 
-		else if (user.phoneNumber != 0) {
-			user.phoneNumber = user.tempNumber;
+		std::string fullName = user.name + " " + user.surname;
+
+		size_t spacePos = tempFullName.find(' ');
+
+		set_text_color(CYAN);
+		if (spacePos != std::string::npos) {
+			if (fullName == "S S" ) {   //|| fullName == user.name + " S" || fullName == "S " + user.surname
+				fullName = it->second;
+			} if (user.name == "S") {
+				//std::cout << user.name;
+				user.name = tempFullName.substr(0, spacePos); 
+				//std::cout << user.name;
+			} if (user.surname == "S") {	
+				user.surname = tempFullName.substr(spacePos + 1);
+			} if (user.phoneNumber == 0) {
+				user.phoneNumber = user.tempNumber;
+			}
+			fullName = user.name + " " + user.surname;
 		}
+
 		phoneBook.insert({user.phoneNumber, fullName});
 		// it->first = user.phoneNumber;
 		// it->second = fullName;
@@ -79,7 +95,7 @@ void choiceTwo(UserData& user) {
 		std::cout << "Full name: " << fullName << "\nPhone number: " << user.phoneNumber << std::endl;
 		std::cout << "\n";
 	} else {
-		std::cout << "User with that phone number not found " << std::endl;
+		std::cout << "User with that phone number not found." << std::endl;
 	}
 }
 
@@ -99,6 +115,11 @@ UserData dataChoiceOne() {
 	std::cout << "Phone number (in this format: 89999999999): ";
 	std::cin >> user.phoneNumber;
 
+	auto it = phoneBook.find(user.phoneNumber);
+
+	if (user.phoneNumber == it->first) {
+		std::cout << "User with the same phone number already exist, please try again with the different number." << std::endl;
+	}
 	return user;
 }
 
@@ -117,7 +138,7 @@ UserData dataChoiceTwo() {
 	std::cin >> user.name;
 	std::cout << "New surname: ";
 	std::cin >> user.surname;
-	std::cout << "Existing phone number that you want to change :(in this format: 89999999999): ";
+	std::cout << "Existing phone number that you want to change (in this format: 89999999999): ";
 	std::cin >> user.phoneNumber;
 	std::cout << "New phone number: ";
 	std::cin >> user.tempNumber;
