@@ -27,8 +27,9 @@ void set_text_color(const Color& color) {
 	std::cout << color.code;
 }
 
-struct UserData {		// unused struct
+struct UserData {		
 	long long phoneNumber;
+	long long tempNumber;
 	std::string name;
 	std::string surname;
 };
@@ -43,6 +44,8 @@ void startScreen() {
 	std::cout << "So, what do you want to do? Please, write a number: " << std::endl; 
 	set_text_color(BLUE);
 	std::cout << "1. Add user\n2. Change user\n3. Delete user" << std::endl; 
+	set_text_color(YELLOW);
+	std::cout << "To leave this menu, press ctrl + c" << std::endl;
 	//set_text_color(RESET);
 }
 
@@ -56,9 +59,28 @@ void choiceOne(const UserData& user) {
 	std::cout << "\n";
 }
 
-void choiceTwo() {
-	system("cls");
-	std::cout << "choiceTwo";
+void choiceTwo(UserData& user) {
+	auto it = phoneBook.find(user.phoneNumber);
+
+	if (it != phoneBook.end()) {
+		phoneBook.erase(it);
+		std::string fullName = user.name + " " + user.surname;
+		if (fullName == "S S" ) {   //|| fullName == user.name + " S" || fullName == "S " + user.surname
+			fullName = it->second;
+		} else if ()
+
+		else if (user.phoneNumber != 0) {
+			user.phoneNumber = user.tempNumber;
+		}
+		phoneBook.insert({user.phoneNumber, fullName});
+		// it->first = user.phoneNumber;
+		// it->second = fullName;
+		std::cout << "The change was successful. New user data: " << std::endl;
+		std::cout << "Full name: " << fullName << "\nPhone number: " << user.phoneNumber << std::endl;
+		std::cout << "\n";
+	} else {
+		std::cout << "User with that phone number not found " << std::endl;
+	}
 }
 
 void choiceThree() {
@@ -66,7 +88,7 @@ void choiceThree() {
 	std::cout << "choiceThree";
 }
 
-UserData userData() {
+UserData dataChoiceOne() {
 	UserData user;
 	set_text_color(MAGENTA);
 	std::cout << "Write name, surname and phone number of a user: " << std::endl;
@@ -80,18 +102,44 @@ UserData userData() {
 	return user;
 }
 
+UserData dataChoiceTwo() {
+	UserData user;
+
+	std::cout << "Write parameters that you want to change. If you don't want to change something, write 'S' symbol when needed." << std::endl;
+
+	set_text_color(MAGENTA);
+	// std::cout << "Find the phone number of user that you want to change: " << std::endl;
+	// std::cin >> user.phoneNumber;
+	// auto it = phoneBook.find(user.number);
+
+	std::cout << "Write name, surname and phone number of a user: " << std::endl;
+	std::cout << "New name: ";
+	std::cin >> user.name;
+	std::cout << "New surname: ";
+	std::cin >> user.surname;
+	std::cout << "Existing phone number that you want to change :(in this format: 89999999999): ";
+	std::cin >> user.phoneNumber;
+	std::cout << "New phone number: ";
+	std::cin >> user.tempNumber;
+	std::cout << "\n";
+
+	return user;
+}
+	
 void startOptions() {
  	int choice;
  	std::cout << "\n";
  	std::cin >> choice;
  	std::cout << "\n";
- 	UserData user = userData();
+ 	UserData user;
  	switch(choice) {
  		case 1:
+ 			user = dataChoiceOne();
  			choiceOne(user);
  			break;
  		case 2:
- 			choiceTwo();
+ 			user = dataChoiceTwo();
+ 			choiceTwo(user);
  			break;
  		case 3:
  			choiceThree();
