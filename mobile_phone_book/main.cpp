@@ -60,6 +60,10 @@ void choiceOne(const UserData& user) {
 }
 
 void choiceTwo(UserData& user) {
+
+	// set_text_color(RED);
+	// std::cout << user.phoneNumber;
+	// set_text_color(CYAN);
 	
 	auto it = phoneBook.find(user.phoneNumber);
 
@@ -82,12 +86,14 @@ void choiceTwo(UserData& user) {
 				//std::cout << user.name;
 			} if (user.surname == "S") {	
 				user.surname = tempFullName.substr(spacePos + 1);
-			} if (user.phoneNumber == 0) {
+			} if (user.phoneNumber != 0) {
 				user.phoneNumber = user.tempNumber;
 			}
-			fullName = user.name + " " + user.surname;
 		}
-
+		// set_text_color(RED);
+		// std::cout << user.phoneNumber;
+		// set_text_color(CYAN);
+		fullName = user.name + " " + user.surname;
 		phoneBook.insert({user.phoneNumber, fullName});
 		// it->first = user.phoneNumber;
 		// it->second = fullName;
@@ -99,9 +105,11 @@ void choiceTwo(UserData& user) {
 	}
 }
 
-void choiceThree() {
-	system("cls");
-	std::cout << "choiceThree";
+void choiceThree(const UserData& user) {
+	//system("cls");
+	phoneBook.erase(user.phoneNumber);
+	set_text_color(RED);
+	std::cout << "User was successfully deleted. \n" << std::endl;
 }
 
 UserData dataChoiceOne() {
@@ -114,12 +122,8 @@ UserData dataChoiceOne() {
 	std::cin >> user.surname;
 	std::cout << "Phone number (in this format: 89999999999): ";
 	std::cin >> user.phoneNumber;
+	std::cout << "\n";
 
-	auto it = phoneBook.find(user.phoneNumber);
-
-	if (user.phoneNumber == it->first) {
-		std::cout << "User with the same phone number already exist, please try again with the different number." << std::endl;
-	}
 	return user;
 }
 
@@ -156,17 +160,37 @@ void startOptions() {
  	switch(choice) {
  		case 1:
  			user = dataChoiceOne();
- 			choiceOne(user);
+ 			if (phoneBook.size() > 0) {
+				auto it = phoneBook.find(user.phoneNumber);
+
+				if (user.phoneNumber == it->first) {
+					set_text_color(RED);
+					std::cout << "User with the same phone number already exist, please try again with the different number. \n" << std::endl;
+				} else {
+					choiceOne(user);
+				}	
+			} else {
+				choiceOne(user);
+			} 
  			break;
  		case 2:
  			user = dataChoiceTwo();
  			choiceTwo(user);
  			break;
  		case 3:
- 			choiceThree();
+ 			set_text_color(RED);
+ 			std::cout << "Are you sure that you want to delete user from the phonebook?" << std::endl;
+ 			std::cout << "Type 'y' or 'n': ";
+ 			char deleteChoice;
+ 			std::cin >> deleteChoice;
+ 			std::cout << "\n";
+ 			if (deleteChoice == 'y') {
+ 				user = dataChoiceOne();
+ 				choiceThree(user);
+ 			} 
  			break;
  		default: 
- 			std::cout << "Please, write a number to make a choice!" << std::endl;
+ 			std::cout << "Please, write a correct number to make a choice!" << std::endl;
  	} 
 }
 
@@ -177,9 +201,6 @@ void userUI() {
 
 int main() {
 	bool isRunning = true;
-
-	userUI();
-	
 
 	while(isRunning) {
 		userUI();
