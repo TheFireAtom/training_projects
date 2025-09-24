@@ -6,7 +6,7 @@
 #include <utility>
 
 // Console font color changing setup
-struct Color {
+struct Color {				
 	std::string name;
 	std::string code;
 };
@@ -82,7 +82,7 @@ void choiceTwo(UserData& user) {
 				fullName = it->second;
 			} if (user.name == "S") {
 				//std::cout << user.name;
-				user.name = tempFullName.substr(0, spacePos); 
+				user.name = tempFullName.substr(0, spacePos); 	// Maybe in the future I will rewrite this logic
 				//std::cout << user.name;
 			} if (user.surname == "S") {	
 				user.surname = tempFullName.substr(spacePos + 1);
