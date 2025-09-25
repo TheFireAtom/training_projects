@@ -200,8 +200,8 @@ void userUI() {
 }
 
 int main() {
-	bool isRunning = true;
-
+	bool isRunning = true;	// This is not used for now, will change in the future. 
+							// On linux startScreen() runs infinetly after you choose secondOption()
 	while(isRunning) {
 		userUI();
 	}
