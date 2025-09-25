@@ -4,6 +4,7 @@
 #include <cstdlib>
 #include <unordered_map>
 #include <utility>
+#include <limits>
 
 // Console font color changing setup
 struct Color {				
@@ -35,6 +36,13 @@ struct UserData {
 };
 
 std::unordered_map<long long, std::string> phoneBook;
+
+void cinFix() {
+	if (std::cin.fail()) {
+		std::cin.clear();
+		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '/n');
+	}
+}
 
 void startScreen() {
 	set_text_color(GREEN);
@@ -124,6 +132,8 @@ UserData dataChoiceOne() {
 	std::cin >> user.phoneNumber;
 	std::cout << "\n";
 
+	cinFix();
+
 	return user;
 }
 
@@ -148,6 +158,8 @@ UserData dataChoiceTwo() {
 	std::cin >> user.tempNumber;
 	std::cout << "\n";
 
+	cinFix();
+
 	return user;
 }
 	
@@ -163,7 +175,7 @@ void startOptions() {
  			if (phoneBook.size() > 0) {
 				auto it = phoneBook.find(user.phoneNumber);
 
-				if (user.phoneNumber == it->first) {
+				if (it != phoneBook.end()) {
 					set_text_color(RED);
 					std::cout << "User with the same phone number already exist, please try again with the different number. \n" << std::endl;
 				} else {
@@ -183,6 +195,9 @@ void startOptions() {
  			std::cout << "Type 'y' or 'n': ";
  			char deleteChoice;
  			std::cin >> deleteChoice;
+			
+			cinFix();
+
  			std::cout << "\n";
  			if (deleteChoice == 'y') {
  				user = dataChoiceOne();
